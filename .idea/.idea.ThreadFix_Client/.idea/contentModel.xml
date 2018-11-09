@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="C:\Users\Kostia\.Rider2018.2\system\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\Kostia\.Rider2018.2\system\resharper-host\Local\Transient\ReSharperHost\v182\SolutionCaches\_ThreadFix_Client.-1303794554.00" t="ExcludeRecursive" />
+    <e p="C:\Users\Kostia\Documents\ThreadFix_Client" t="IncludeRecursive">
+      <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
+      <e p="Assets" t="Include">
+        <e p="scripts" t="Include">
+          <e p="SampleScript.cs" t="Include" />
+          <e p="Soft.cs" t="Include" />
+        </e>
+      </e>
+      <e p="Library" t="ExcludeRecursive" />
+      <e p="obj" t="ExcludeRecursive" />
+      <e p="packages" t="ExcludeRecursive" />
+      <e p="Temp" t="ExcludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+      </e>
+      <e p="ThreadFix_Client.sln" t="IncludeFlat" />
+    </e>
+  </component>
+</project>
