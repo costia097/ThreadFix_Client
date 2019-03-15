@@ -1,71 +1,74 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Net.Sockets;
 using System.Threading;
 using UnityEngine;
 
+[SuppressMessage("ReSharper", "InconsistentNaming")]
+[SuppressMessage("ReSharper", "FieldCanBeMadeReadOnly.Local")]
+[SuppressMessage("ReSharper", "MemberCanBeMadeStatic.Global")]
 public class ClientFunctional
 {
-    private Queue<string> QueueToRead = new Queue<string>();
-    private NetworkStream NetworkStream;
-    private StreamReader StreamReader;
-    private StreamWriter StreamWriter;
+    private Queue<string> queueToRead = new Queue<string>();
+    
+    private NetworkStream networkStream;
+    private StreamReader streamReader;
+    private StreamWriter streamWriter;
         
-    private void EventChecker()
+    private void eventChecker()
     {
-        Thread thread = new Thread(Start);
+        var thread = new Thread(start);
         thread.Start();
     }
 
-    private void Start()
+    private void start()
     {
         while (true)
         {
             Console.WriteLine("CHECKER WORK");
-            var value = StreamReader.ReadLine();
+            var value = streamReader.ReadLine();
             if (value != null)
             {
-                QueueToRead.Enqueue(value);
+                queueToRead.Enqueue(value);
             }
-            Thread.Sleep(300);
         }
     }
 
 
     public void StartClient()
     {
-        TcpClient tcpClient = new TcpClient();
+        var tcpClient = new TcpClient();
         tcpClient.Connect("127.0.0.1", 27015);
 
-        NetworkStream = tcpClient.GetStream();
+        networkStream = tcpClient.GetStream();
             
-        StreamReader = new StreamReader(NetworkStream);
-        StreamWriter = new StreamWriter(NetworkStream) {AutoFlush = true};
-        EventChecker();
-        StartProcessing();
+        streamReader = new StreamReader(networkStream);
+        streamWriter = new StreamWriter(networkStream) {AutoFlush = true};
+        eventChecker();
+        startProcessing();
     }
 
-    private void StartProcessing()
+    private void startProcessing()
     {
-        Thread thread = new Thread(() =>
+        var thread = new Thread(() =>
         {
+            //TODO fix it please
             while (true)
             {
-                if (QueueToRead.Count > 0)
+                if (queueToRead.Count > 0)
                 {
-                    var element = QueueToRead.Dequeue();
+                    var element = queueToRead.Dequeue();
                     Debug.Log(element);
                 }
-
-                SendMessage(EventType.Movement, "test");
                 Thread.Sleep(1000);
             }   
         });
         thread.Start();
     }
 
-    public void SendMessage(EventType eventType, object message)
+    public void sendMessage(EventType eventType, object message)
     {
         switch (eventType)
         {

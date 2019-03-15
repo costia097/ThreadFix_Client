@@ -1,50 +1,71 @@
-﻿using Newtonsoft.Json;
+﻿using System.Diagnostics.CodeAnalysis;
+using Newtonsoft.Json;
 using UnityEngine;
 
+[SuppressMessage("ReSharper", "InconsistentNaming")]
+[SuppressMessage("ReSharper", "ArrangeTypeMemberModifiers")]
 public class MainHeroScript : MonoBehaviour {
-	private ClientFunctional ClientFunctional;
-	private Rigidbody2D Rigidbody2D;
+	
+	private ClientFunctional clientFunctional;
+	
+	private Rigidbody2D heroRigidbody2d;
+	
 	public float speed = 4;
-	private long PlayerId;
+
+	public bool isOffline;
+
+	public BoxCollider2D groundBoxCollider2d;
+	
+	private long playerId;
+	
 	
 	void Start () {
-		Rigidbody2D = GetComponent<Rigidbody2D>();
-		ClientFunctional = new ClientFunctional();
-		PlayerId = GetHashCode();
-		ClientFunctional.StartClient();
-		Debug.Log(Rigidbody2D);
+		heroRigidbody2d = GetComponent<Rigidbody2D>();
+		clientFunctional = new ClientFunctional();
+		
+		playerId = GetHashCode();
+
+		if (!isOffline)
+		{
+			clientFunctional.StartClient();
+		}
+		
+		Debug.Log(heroRigidbody2d);
 	}
 	
 	
 	void Update () {
 		if (Input.GetKey(KeyCode.LeftArrow))
 		{
-			Rigidbody2D.position =
-				new Vector2(Rigidbody2D.position.x - 1 * speed * Time.deltaTime, Rigidbody2D.position.y);
-
-			MovementDto movementDto = new MovementDto();
+			var position = heroRigidbody2d.position;
 			
-			movementDto.PlayerId = PlayerId;
-			movementDto.X = Rigidbody2D.position.x;
-			movementDto.Y = Rigidbody2D.position.y;
+			position = new Vector2(position.x - 1 * speed * Time.deltaTime, position.y);
+			heroRigidbody2d.position = position;
+
+			var movementDto = new MovementDto {playerId = playerId, x = position.x, y = position.y};
 
 			var serializeObject = JsonConvert.SerializeObject(movementDto);
 
-
-			ClientFunctional.SendMessage(EventType.Movement, "test");
+			Debug.Log(serializeObject);
 		}
 
 		if (Input.GetKey(KeyCode.RightArrow))
 		{
-			Rigidbody2D.position =
-				new Vector2(Rigidbody2D.position.x + 1 * speed * Time.deltaTime, Rigidbody2D.position.y);
+			var position = heroRigidbody2d.position;
+			heroRigidbody2d.position = new Vector2(position.x + 1 * speed * Time.deltaTime, position.y);
+				
+			var movementDto = new MovementDto {playerId = playerId, x = position.x, y = position.y};
 
-			ClientFunctional.SendMessage(EventType.Movement, "test");
+			var serializeObject = JsonConvert.SerializeObject(movementDto);
+			
+			Debug.Log(serializeObject);
 		}
 
-		if (Input.GetKeyUp(KeyCode.Space))
+		if (Input.GetKeyUp(KeyCode.Space) && heroRigidbody2d.IsTouching(groundBoxCollider2d))
 		{
+			heroRigidbody2d.AddForce(new Vector2(0, 10), ForceMode2D.Impulse);
 			Debug.Log("JUMP");
 		}
+	
 	}
 }

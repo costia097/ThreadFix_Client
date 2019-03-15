@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ContentModelStore">
-    <e p="C:\Users\Kostia\.Rider2018.2\system\extResources" t="IncludeRecursive" />
-    <e p="C:\Users\Kostia\.Rider2018.2\system\resharper-host\Local\Transient\ReSharperHost\v182\SolutionCaches\_ThreadFix_Client.-1303794554.00" t="ExcludeRecursive" />
-    <e p="C:\Users\Kostia\Documents\ThreadFix_Client" t="IncludeRecursive">
+    <e p="C:\Users\Kostia\.Rider2018.3\system\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\Kostia\.Rider2018.3\system\resharper-host\Local\Transient\ReSharperHost\v183\SolutionCaches\_ThreadFix_Client.1037208017.00" t="ExcludeRecursive" />
+    <e p="C:\Users\Kostia\IdeaProjects\ThreadFix_Client" t="IncludeRecursive">
       <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
       <e p="Assets" t="Include">
         <e p="JsonDotNet" t="Include">

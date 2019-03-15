@@ -1,27 +1,12 @@
-using System;
+using System.Diagnostics.CodeAnalysis;
 
-//[Serializable]
+[SuppressMessage("ReSharper", "InconsistentNaming")]
+[SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global")]
 public class MovementDto
 {
-    private long playerId;
-    private float x;
-    private float y;
+    public long playerId { get; set; }
 
-    public long PlayerId
-    {
-        get { return playerId; }
-        set { playerId = value; }
-    }
+    public float x { get; set; }
 
-    public float X
-    {
-        get { return x; }
-        set { x = value; }
-    }
-
-    public float Y
-    {
-        get { return y; }
-        set { y = value; }
-    }
+    public float y { get; set; }
 }
