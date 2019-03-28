@@ -59,10 +59,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\scripts\ClientFunctional.cs" />
-    <Compile Include="Assets\scripts\EventType.cs" />
+    <Compile Include="Assets\scripts\core\message\FirstSyncMessage.cs" />
+    <Compile Include="Assets\scripts\core\message\MessageType.cs" />
+    <Compile Include="Assets\scripts\core\message\MessageWrapper.cs" />
+    <Compile Include="Assets\scripts\core\message\PlayerJoinMessage.cs" />
+    <Compile Include="Assets\scripts\core\message\PlayerMoveMessage.cs" />
+    <Compile Include="Assets\scripts\core\ServerPlayer.cs" />
     <Compile Include="Assets\scripts\MainHeroScript.cs" />
-    <Compile Include="Assets\scripts\MovementDto.cs" />
+    <Compile Include="Assets\scripts\Test.cs" />
     <None Include="Assets\JsonDotNet\link.xml" />
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>C:/Users/Kostia/IdeaProjects/ThreadFix_Client/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>

@@ -10,10 +10,18 @@
           <e p="link.xml" t="Include" />
         </e>
         <e p="scripts" t="Include">
-          <e p="ClientFunctional.cs" t="Include" />
-          <e p="EventType.cs" t="Include" />
+          <e p="core" t="Include">
+            <e p="message" t="Include">
+              <e p="FirstSyncMessage.cs" t="Include" />
+              <e p="MessageType.cs" t="Include" />
+              <e p="MessageWrapper.cs" t="Include" />
+              <e p="PlayerJoinMessage.cs" t="Include" />
+              <e p="PlayerMoveMessage.cs" t="Include" />
+            </e>
+            <e p="ServerPlayer.cs" t="Include" />
+          </e>
           <e p="MainHeroScript.cs" t="Include" />
-          <e p="MovementDto.cs" t="Include" />
+          <e p="Test.cs" t="Include" />
         </e>
       </e>
       <e p="Library" t="ExcludeRecursive" />
