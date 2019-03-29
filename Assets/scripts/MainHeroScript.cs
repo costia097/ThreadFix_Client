@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.Net;
 using System.Net.Sockets;
 using core;
 using core.message;
@@ -52,10 +51,10 @@ public class MainHeroScript : MonoBehaviour {
 		}
 
 		sendClientPlayerJoinMessage();
-		
-		//0.0151f
 
-		InvokeRepeating("doMultiplayerMovementLogic", 0.0f, 0.0333f);
+		// 0.03333333333f
+		
+		InvokeRepeating("doMultiplayerMovementLogic", 0.0f, 0.03333333333f);
 	}
 
 	private void doMultiplayerMovementLogic()
@@ -80,6 +79,9 @@ public class MainHeroScript : MonoBehaviour {
 
 		playerMoveMessage.x = (float)Math.Round(heroPosition.x, 2);
 		playerMoveMessage.y =(float)Math.Round(heroPosition.y, 2);
+
+		playerMoveMessage.rotationZ = heroRigidbody2d.transform.rotation.eulerAngles.z;
+		
 		playerMoveMessage.playerId = heroRigidbody2d.name;
 
 		var playerMovePayload = JsonConvert.SerializeObject(playerMoveMessage);
@@ -131,7 +133,7 @@ public class MainHeroScript : MonoBehaviour {
 
 	private void processPlayerJoinMessage(PlayerJoinMessage playerJoinMessage)
 	{
-		var prefab = Resources.Load<GameObject>("Prefabs/Hero4");
+		var prefab = Resources.Load<GameObject>("Prefabs/Hero4-Authres");
 		var instantiate = Instantiate(prefab, new Vector3(0, 0, 0), Quaternion.identity);
 		instantiate.name = playerJoinMessage.playerId;
 		var serverPlayer = new ServerPlayer {x = 0, y = 0, name = playerJoinMessage.playerId};
@@ -148,7 +150,10 @@ public class MainHeroScript : MonoBehaviour {
 				if (targetPlayer != null)
 				{
 					var targetTransformPlayer = targetPlayer.GetComponent<Transform>();
-					targetTransformPlayer.position = new Vector3(playerMoveMessage.x, playerMoveMessage.y);
+					targetTransformPlayer.position = new Vector2(playerMoveMessage.x, playerMoveMessage.y);
+
+					targetTransformPlayer.rotation = Quaternion.Euler(new Vector3(playerMoveMessage.rotationX,
+						playerMoveMessage.rotationY, playerMoveMessage.rotationZ));
 				}	
 			}
 		}
@@ -160,7 +165,7 @@ public class MainHeroScript : MonoBehaviour {
 		
 		foreach (var serverPlayer in serverPlayers)
 		{
-			var prefab = Resources.Load<GameObject>("Prefabs/Hero4");
+			var prefab = Resources.Load<GameObject>("Prefabs/Hero4-Authres");
 			var instantiate = Instantiate(prefab, new Vector3(serverPlayer.x, serverPlayer.y, serverPlayer.z), Quaternion.identity);
 			instantiate.name = serverPlayer.name;
 		}
@@ -208,6 +213,23 @@ public class MainHeroScript : MonoBehaviour {
 		{
 			isGameActive = false;
 			Application.Quit();
+		}
+		
+		if (Input.GetKeyUp(KeyCode.C))
+		{
+			var transform1 = heroRigidbody2d.transform;
+
+			var rotation1 = transform1.rotation;
+			var vecRotation = rotation1.eulerAngles;
+
+			vecRotation.z += 90;
+
+			transform1.rotation = Quaternion.Euler(vecRotation);
+			
+			var rotation = rotation1;
+			Debug.Log(rotation.eulerAngles.x);
+			Debug.Log(rotation.eulerAngles.y);
+			Debug.Log(rotation.eulerAngles.z);
 		}
 	}
 	void FixedUpdate()

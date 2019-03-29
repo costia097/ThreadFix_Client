@@ -21,7 +21,6 @@
             <e p="ServerPlayer.cs" t="Include" />
           </e>
           <e p="MainHeroScript.cs" t="Include" />
-          <e p="Test.cs" t="Include" />
         </e>
       </e>
       <e p="Library" t="ExcludeRecursive" />
