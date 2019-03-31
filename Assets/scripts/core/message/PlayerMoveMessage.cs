@@ -1,23 +1,19 @@
-using System.Diagnostics.CodeAnalysis;
-
 namespace core.message
 {
-    [SuppressMessage("ReSharper", "InconsistentNaming")]
-    [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global")]
     public class PlayerMoveMessage
     {
-        public string playerId { get; set; }
+        public string PlayerId { get; set; }
 
-        public float x { get; set; }
+        public float X { get; set; }
 
-        public float y { get; set; }
+        public float Y { get; set; }
         
-        public float z { get; set; }
+        public float Z { get; set; }
         
-        public float rotationX { get; set; }
+        public float RotationX { get; set; }
 
-        public float rotationY { get; set; }
+        public float RotationY { get; set; }
 
-        public float rotationZ { get; set; }
+        public float RotationZ { get; set; }
     }
 }
