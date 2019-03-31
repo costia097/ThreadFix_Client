@@ -20,7 +20,10 @@
             </e>
             <e p="ServerPlayer.cs" t="Include" />
           </e>
-          <e p="MainHeroScript.cs" t="Include" />
+          <e p="MainHeroAnimationScript.cs" t="Include" />
+          <e p="MainHeroController.cs" t="Include" />
+          <e p="MessageProcessor.cs" t="Include" />
+          <e p="NetworkManager.cs" t="Include" />
         </e>
       </e>
       <e p="Library" t="ExcludeRecursive" />
