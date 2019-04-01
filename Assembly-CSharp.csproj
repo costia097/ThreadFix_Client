@@ -59,13 +59,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\core\message\FirstSyncMessage.cs" />
+    <Compile Include="Assets\Scripts\core\entities\Enemy.cs" />
+    <Compile Include="Assets\Scripts\core\entities\ServerPlayer.cs" />
+    <Compile Include="Assets\Scripts\core\message\Direction.cs" />
+    <Compile Include="Assets\Scripts\core\message\EnemyStateMessage.cs" />
+    <Compile Include="Assets\Scripts\core\message\FirstEnemiesSyncMessage.cs" />
+    <Compile Include="Assets\Scripts\core\message\FirstPlayersSyncMessage.cs" />
     <Compile Include="Assets\Scripts\core\message\MessageType.cs" />
     <Compile Include="Assets\Scripts\core\message\MessageWrapper.cs" />
     <Compile Include="Assets\Scripts\core\message\PlayerJoinMessage.cs" />
     <Compile Include="Assets\Scripts\core\message\PlayerStateMessage.cs" />
+    <Compile Include="Assets\Scripts\core\message\PlayerWaveMessage.cs" />
     <Compile Include="Assets\Scripts\core\processor\MessageProcessor.cs" />
-    <Compile Include="Assets\Scripts\core\ServerPlayer.cs" />
     <Compile Include="Assets\Scripts\MainHeroAnimationScript.cs" />
     <Compile Include="Assets\Scripts\MainHeroController.cs" />
     <Compile Include="Assets\Scripts\NetworkManager.cs" />

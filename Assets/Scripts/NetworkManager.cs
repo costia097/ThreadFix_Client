@@ -1,6 +1,5 @@
 ﻿using System.IO;
 using System.Net.Sockets;
-using core;
 using core.message;
 using core.processor;
 using Newtonsoft.Json;
@@ -20,12 +19,9 @@ public class NetworkManager : MonoBehaviour
 
 	private Rigidbody2D _mainHeroRigidbody2D;
 
-	private MessageProcessor _messageProcessor;
-
 	private void Start()
     {
 	    _mainHeroRigidbody2D = GetComponent<MainHeroController>().HeroRigidbody2D;
-	    _messageProcessor = new MessageProcessor();
 	    var heroName = GetComponent<MainHeroController>().name;
 	    
 	    if (isOffline) return;
@@ -61,7 +57,7 @@ public class NetworkManager : MonoBehaviour
 			var messageString = _streamReader.ReadLine();
 			if (messageString != null && !messageString.Equals(""))
 			{
-				_messageProcessor.ProcessMessage(messageString);
+				MessageProcessor.ProcessMessage(messageString);
 			}
 		}
 	}
@@ -99,6 +95,22 @@ public class NetworkManager : MonoBehaviour
 
 		var messageWrapperString = JsonConvert.SerializeObject(messageWrapper);
 		
+		SendMessageToServer(messageWrapperString);
+	}
+
+	public void SendPlayerWaveSword()
+	{
+		var messageWrapper = new MessageWrapper();
+
+		var playerWaveMessage = new PlayerWaveMessage {PlayerName = name, Direction = Direction.Right};
+
+		var playerWaveMessagePayload = JsonConvert.SerializeObject(playerWaveMessage);
+
+		messageWrapper.Payload = playerWaveMessagePayload;
+		messageWrapper.MessageType = MessageType.PlayerWave;
+
+		var messageWrapperString = JsonConvert.SerializeObject(messageWrapper);
+
 		SendMessageToServer(messageWrapperString);
 	}
 	

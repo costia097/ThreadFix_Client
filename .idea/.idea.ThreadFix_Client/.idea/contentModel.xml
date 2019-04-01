@@ -11,17 +11,24 @@
         </e>
         <e p="scripts" t="Include">
           <e p="core" t="Include">
+            <e p="entities" t="Include">
+              <e p="Enemy.cs" t="Include" />
+              <e p="ServerPlayer.cs" t="Include" />
+            </e>
             <e p="message" t="Include">
-              <e p="FirstSyncMessage.cs" t="Include" />
+              <e p="Direction.cs" t="Include" />
+              <e p="EnemyStateMessage.cs" t="Include" />
+              <e p="FirstEnemiesSyncMessage.cs" t="Include" />
+              <e p="FirstPlayersSyncMessage.cs" t="Include" />
               <e p="MessageType.cs" t="Include" />
               <e p="MessageWrapper.cs" t="Include" />
               <e p="PlayerJoinMessage.cs" t="Include" />
               <e p="PlayerStateMessage.cs" t="Include" />
+              <e p="PlayerWaveMessage.cs" t="Include" />
             </e>
             <e p="processor" t="Include">
               <e p="MessageProcessor.cs" t="Include" />
             </e>
-            <e p="ServerPlayer.cs" t="Include" />
           </e>
           <e p="MainHeroAnimationScript.cs" t="Include" />
           <e p="MainHeroController.cs" t="Include" />

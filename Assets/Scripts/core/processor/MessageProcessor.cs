@@ -1,16 +1,15 @@
 using System.Collections.Generic;
+using core.entities;
 using core.message;
 using Newtonsoft.Json;
 using UnityEngine;
 
 namespace core.processor
 {
-    public class MessageProcessor
+    public static class MessageProcessor
     {
     
-        private List<ServerPlayer> _players = new List<ServerPlayer>();
-    
-        public void ProcessMessage(string message)
+        public static void ProcessMessage(string message)
         {
             var messageWrapper = JsonConvert.DeserializeObject<MessageWrapper>(message);
 
@@ -24,46 +23,72 @@ namespace core.processor
                     var playerMoveMessage = JsonConvert.DeserializeObject<PlayerStateMessage>(messageWrapper.Payload);
                     ProcessPlayerStateMessage(playerMoveMessage);
                     break;
-                case MessageType.FirstSync:
+                case MessageType.FirstPlayersSync:
                     var serverPlayers = JsonConvert.DeserializeObject<List<ServerPlayer>>(messageWrapper.Payload);
-                    var firstSyncMessage = new FirstSyncMessage();
-                    firstSyncMessage.Players = serverPlayers;
-                    ProcessFirstSyncMessage(firstSyncMessage);
+                    var firstPlayersSyncMessage = new FirstPlayersSyncMessage();
+                    firstPlayersSyncMessage.Players = serverPlayers;
+                    ProcessFirstPlayersSyncMessage(firstPlayersSyncMessage);
+                    break;
+                case MessageType.FirstEnemiesSync:
+                    var enemies = JsonConvert.DeserializeObject<List<Enemy>>(messageWrapper.Payload);
+                    var firstEnemiesSyncMessage = new FirstEnemiesSyncMessage();
+                    firstEnemiesSyncMessage.Enemies = enemies;
+                    ProcessFirstEnemiesSyncMessage(firstEnemiesSyncMessage);
+                    break;
+                case MessageType.EnemyState:
+                    var enemyStateMessage = JsonConvert.DeserializeObject<EnemyStateMessage>(messageWrapper.Payload);
+                    ProcessEnemyStateMessage(enemyStateMessage);
+                    break;
+                case MessageType.PlayerWave:
+                    var playerWaveMessage = JsonConvert.DeserializeObject<PlayerWaveMessage>(messageWrapper.Payload);
+                    ProcessPlayerWaveMessage(playerWaveMessage);
                     break;
                 default:
                     throw new UnityException();
             }
         }
     
-        private void ProcessPlayerJoinMessage(PlayerJoinMessage playerJoinMessage)
+        private static void ProcessPlayerJoinMessage(PlayerJoinMessage playerJoinMessage)
         {
             var prefab = Resources.Load<GameObject>("Prefabs/MainHero");
             var instantiate = Object.Instantiate(prefab, new Vector3(0, 0, 0), Quaternion.identity);
             instantiate.name = playerJoinMessage.PlayerId;
-            var serverPlayer = new ServerPlayer {X = 0, Y = 0, Z = 0, Name = playerJoinMessage.PlayerId};
-        
-            _players.Add(serverPlayer);
         }
 
-        private void ProcessPlayerStateMessage(PlayerStateMessage playerStateMessage)
+        private static void ProcessPlayerStateMessage(PlayerStateMessage playerStateMessage)
         {
-            foreach (var serverPlayer in _players)
-            {
-                if (!serverPlayer.Name.Equals(playerStateMessage.PlayerId)) continue;
+            var targetPlayer = GameObject.Find(playerStateMessage.PlayerId);
             
-                var targetPlayer = GameObject.Find(playerStateMessage.PlayerId);
+            if (targetPlayer == null) return;
             
-                if (targetPlayer == null) continue;
-            
-                var targetTransformPlayer = targetPlayer.GetComponent<Transform>();
+            var targetTransformPlayer = targetPlayer.GetComponent<Transform>();
 
-                var targetPosition = new Vector2(playerStateMessage.X, playerStateMessage.Y);
+            var targetPosition = new Vector2(playerStateMessage.X, playerStateMessage.Y);
 
-                TryToDoSmoothy(targetTransformPlayer, targetPosition);
+            TryToDoSmoothy(targetTransformPlayer, targetPosition);
             
-                targetTransformPlayer.rotation = Quaternion.Euler(new Vector3(playerStateMessage.RotationX,
-                    playerStateMessage.RotationY, playerStateMessage.RotationZ));
-            }
+            targetTransformPlayer.rotation = Quaternion.Euler(new Vector3(playerStateMessage.RotationX,
+                playerStateMessage.RotationY, playerStateMessage.RotationZ));
+        }
+
+        private static void ProcessEnemyStateMessage(EnemyStateMessage enemyStateMessage)
+        {
+            var targetEnemy = GameObject.Find(enemyStateMessage.Name);
+            if (targetEnemy == null) return;
+
+            var targetEnemyTransform = targetEnemy.GetComponent<Transform>();
+
+            targetEnemyTransform.position = new Vector2(enemyStateMessage.X, enemyStateMessage.Y);
+        }
+
+        private static void ProcessPlayerWaveMessage(PlayerWaveMessage playerWaveMessage)
+        {
+            var targetPlayer = GameObject.Find(playerWaveMessage.PlayerName);
+            if (targetPlayer == null) return;
+
+            var targetPlayerAnimator = targetPlayer.GetComponent<Animator>();
+
+            targetPlayerAnimator.Play("Slashing");
         }
 
         //TODO in progress
@@ -80,9 +105,9 @@ namespace core.processor
             }
         }
 
-        private void ProcessFirstSyncMessage(FirstSyncMessage firstSyncMessage)
+        private static void ProcessFirstPlayersSyncMessage(FirstPlayersSyncMessage firstPlayersSyncMessage)
         {
-            var serverPlayers = firstSyncMessage.Players;
+            var serverPlayers = firstPlayersSyncMessage.Players;
 		
             foreach (var serverPlayer in serverPlayers)
             {
@@ -90,9 +115,21 @@ namespace core.processor
                 var instantiate = Object.Instantiate(prefab, new Vector3(serverPlayer.X, serverPlayer.Y, serverPlayer.Z), Quaternion.identity);
                 instantiate.name = serverPlayer.Name;
             }
-
-            _players = serverPlayers;
         }
+
+        private static void ProcessFirstEnemiesSyncMessage(FirstEnemiesSyncMessage enemiesSyncMessage)
+        {
+            var serverEnemies = enemiesSyncMessage.Enemies;
+            
+            serverEnemies.ForEach(enemy =>
+            {
+                var enemyPrefab = Resources.Load<GameObject>("Prefabs/Hero4");
+                var enemyInstantiate =
+                    Object.Instantiate(enemyPrefab, new Vector3(enemy.X, enemy.Y, 0), Quaternion.identity);
+                enemyInstantiate.name = enemy.Name;
+            });
+        }
+        
         
     }
 }

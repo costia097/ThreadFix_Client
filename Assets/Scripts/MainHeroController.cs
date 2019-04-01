@@ -6,9 +6,13 @@ public class MainHeroController : MonoBehaviour
 
     public float speed;
 
+    private NetworkManager _networkManager;
+
     private void Start()
     {
         HeroRigidbody2D = GetComponent<Rigidbody2D>();
+        _networkManager = GetComponent<NetworkManager>();
+        
         name = GetHashCode().ToString();
     }
 
@@ -28,7 +32,13 @@ public class MainHeroController : MonoBehaviour
         {
             HeroRigidbody2D.AddForce(new Vector2(0, 30), ForceMode2D.Impulse);
         }
+
+        if (Input.GetKeyDown(KeyCode.LeftControl))
+        {
+            _networkManager.SendPlayerWaveSword();
+        }
         
+        //TODO
         if (Input.GetKeyUp(KeyCode.Escape))
         {
             Application.Quit();
