@@ -1,6 +1,8 @@
 ﻿using System.IO;
 using System.Net.Sockets;
+using core;
 using core.message;
+using core.processor;
 using Newtonsoft.Json;
 using UnityEngine;
 
@@ -24,14 +26,17 @@ public class NetworkManager : MonoBehaviour
     {
 	    _mainHeroRigidbody2D = GetComponent<MainHeroController>().HeroRigidbody2D;
 	    _messageProcessor = new MessageProcessor();
-	    var heroName = GetComponent<MainHeroController>().HeroName;
+	    var heroName = GetComponent<MainHeroController>().name;
 	    
 	    if (isOffline) return;
 	    
 	    StartClient();
 		    
 	    SendClientPlayerJoinMessage(heroName);
-		
+	    
+	    // 0.03333333333f
+	    // 10.0f
+
 	    InvokeRepeating("DoMultiplayerMovementLogic", 0.0f, 0.03333333333f);
     }
 
@@ -64,7 +69,7 @@ public class NetworkManager : MonoBehaviour
 	private void SendMainHeroPositionToServer()
 	{
 		var messageWrapper = new MessageWrapper();
-		var playerMoveMessage = new PlayerMoveMessage();
+		var playerMoveMessage = new PlayerStateMessage();
 		var heroPosition = _mainHeroRigidbody2D.position;
 
 		playerMoveMessage.X = heroPosition.x;

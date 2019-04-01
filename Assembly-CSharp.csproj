@@ -63,11 +63,11 @@
     <Compile Include="Assets\Scripts\core\message\MessageType.cs" />
     <Compile Include="Assets\Scripts\core\message\MessageWrapper.cs" />
     <Compile Include="Assets\Scripts\core\message\PlayerJoinMessage.cs" />
-    <Compile Include="Assets\Scripts\core\message\PlayerMoveMessage.cs" />
+    <Compile Include="Assets\Scripts\core\message\PlayerStateMessage.cs" />
+    <Compile Include="Assets\Scripts\core\processor\MessageProcessor.cs" />
     <Compile Include="Assets\Scripts\core\ServerPlayer.cs" />
     <Compile Include="Assets\Scripts\MainHeroAnimationScript.cs" />
     <Compile Include="Assets\Scripts\MainHeroController.cs" />
-    <Compile Include="Assets\Scripts\MessageProcessor.cs" />
     <Compile Include="Assets\Scripts\NetworkManager.cs" />
     <None Include="Assets\JsonDotNet\link.xml" />
     <Reference Include="Unity.TextMeshPro.Editor">

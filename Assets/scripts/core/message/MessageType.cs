@@ -2,6 +2,6 @@ namespace core.message
 {
     public enum MessageType
     {
-        PlayerMove, PlayerJoin,FirstSync
+        PlayerState, PlayerJoin,FirstSync
     }
 }
