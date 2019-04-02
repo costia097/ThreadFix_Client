@@ -15,13 +15,21 @@ public class MainHeroAnimationScript : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.RightArrow))
         {
-            _animator.SetBool(IsRunning, true);     
+            _animator.SetBool(IsRunning, true);
         }
         else
         {
             _animator.SetBool(IsRunning, false);
         }
 
-        _animator.SetBool(IsSlashing, Input.GetKey(KeyCode.LeftControl));
+        if (Input.GetKeyDown(KeyCode.LeftControl))
+        {
+            _animator.SetBool(IsSlashing, true);
+        }
+
+        if (Input.GetKeyUp(KeyCode.LeftControl))
+        {
+            _animator.SetBool(IsSlashing, false);
+        }
     }
 }

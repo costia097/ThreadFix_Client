@@ -8,10 +8,14 @@ public class MainHeroController : MonoBehaviour
 
     private NetworkManager _networkManager;
 
+    private bool _isWatchToRightDirection = true;
+
+    private SpriteRenderer _spriteRenderer;
+
     private void Start()
     {
         HeroRigidbody2D = GetComponent<Rigidbody2D>();
-        _networkManager = GetComponent<NetworkManager>();
+        _spriteRenderer = GetComponent<SpriteRenderer>();
         
         name = GetHashCode().ToString();
     }
@@ -21,21 +25,20 @@ public class MainHeroController : MonoBehaviour
         if (Input.GetKey(KeyCode.LeftArrow))
         {
             HeroRigidbody2D.transform.Translate(Vector2.left * Time.deltaTime * speed);
+            _spriteRenderer.flipX = true;
+            _isWatchToRightDirection = false;
         }
         
         if (Input.GetKey(KeyCode.RightArrow))
         {
             HeroRigidbody2D.transform.Translate(Vector2.right * Time.deltaTime * speed);
+            _spriteRenderer.flipX = false;
+            _isWatchToRightDirection = true;
         }
         
         if (Input.GetKeyUp(KeyCode.Space) && HeroRigidbody2D.IsTouching(groundBoxCollider2D))
         {
             HeroRigidbody2D.AddForce(new Vector2(0, 30), ForceMode2D.Impulse);
-        }
-
-        if (Input.GetKeyDown(KeyCode.LeftControl))
-        {
-            _networkManager.SendPlayerWaveSword();
         }
         
         //TODO
@@ -46,4 +49,9 @@ public class MainHeroController : MonoBehaviour
     }
 
     public Rigidbody2D HeroRigidbody2D { get; private set; }
+
+    public bool IsWatchToRightDirection
+    {
+        get { return _isWatchToRightDirection; }
+    }
 }

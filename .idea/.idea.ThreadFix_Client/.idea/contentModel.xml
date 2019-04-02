@@ -17,6 +17,7 @@
             </e>
             <e p="message" t="Include">
               <e p="Direction.cs" t="Include" />
+              <e p="EnemyHittedMessage.cs" t="Include" />
               <e p="EnemyStateMessage.cs" t="Include" />
               <e p="FirstEnemiesSyncMessage.cs" t="Include" />
               <e p="FirstPlayersSyncMessage.cs" t="Include" />
@@ -38,7 +39,9 @@
       <e p="Library" t="ExcludeRecursive" />
       <e p="obj" t="ExcludeRecursive" />
       <e p="packages" t="ExcludeRecursive" />
-      <e p="Temp\bin" t="ExcludeRecursive" />
+      <e p="Temp" t="ExcludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+      </e>
       <e p="ThreadFix_Client.sln" t="IncludeFlat" />
     </e>
   </component>

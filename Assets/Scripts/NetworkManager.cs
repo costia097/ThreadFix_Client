@@ -7,6 +7,10 @@ using UnityEngine;
 
 public class NetworkManager : MonoBehaviour
 {
+	private static readonly int IsRunning = Animator.StringToHash("isRunning");
+	
+	private static readonly int IsSlashing = Animator.StringToHash("isSlashing");
+	
 	public bool isOffline;
 
 	private NetworkStream _networkStream;
@@ -19,10 +23,17 @@ public class NetworkManager : MonoBehaviour
 
 	private Rigidbody2D _mainHeroRigidbody2D;
 
+	private Animator _animator;
+
+	private MainHeroController _mainHeroController;
+
 	private void Start()
     {
-	    _mainHeroRigidbody2D = GetComponent<MainHeroController>().HeroRigidbody2D;
-	    var heroName = GetComponent<MainHeroController>().name;
+	    _mainHeroController = GetComponent<MainHeroController>();
+	    _mainHeroRigidbody2D =_mainHeroController.HeroRigidbody2D;
+	    _animator = GetComponent<Animator>();
+	    
+	    var heroName = _mainHeroController.name;
 	    
 	    if (isOffline) return;
 	    
@@ -50,7 +61,7 @@ public class NetworkManager : MonoBehaviour
 
 	private void DoMultiplayerMovementLogic()
 	{
-		SendMainHeroPositionToServer();
+		SendMainHeroStateToServer();
 		
 		while (_networkStream.DataAvailable)
 		{
@@ -62,20 +73,25 @@ public class NetworkManager : MonoBehaviour
 		}
 	}
 
-	private void SendMainHeroPositionToServer()
+	private void SendMainHeroStateToServer()
 	{
 		var messageWrapper = new MessageWrapper();
-		var playerMoveMessage = new PlayerStateMessage();
+		var playerStateMessage = new PlayerStateMessage();
 		var heroPosition = _mainHeroRigidbody2D.position;
 
-		playerMoveMessage.X = heroPosition.x;
-		playerMoveMessage.Y = heroPosition.y;
+		playerStateMessage.X = heroPosition.x;
+		playerStateMessage.Y = heroPosition.y;
 
-		playerMoveMessage.RotationZ = _mainHeroRigidbody2D.transform.rotation.eulerAngles.z;
+		playerStateMessage.IsWatchToRightDirection = _mainHeroController.IsWatchToRightDirection;
+
+		playerStateMessage.IsRunning = _animator.GetBool(IsRunning);
+		playerStateMessage.IsSlashing = _animator.GetBool(IsSlashing);
+
+		playerStateMessage.RotationZ = _mainHeroRigidbody2D.transform.rotation.eulerAngles.z;
 		
-		playerMoveMessage.PlayerId = _mainHeroRigidbody2D.name;
+		playerStateMessage.PlayerId = _mainHeroRigidbody2D.name;
 
-		var playerMovePayload = JsonConvert.SerializeObject(playerMoveMessage);
+		var playerMovePayload = JsonConvert.SerializeObject(playerStateMessage);
 		messageWrapper.Payload = playerMovePayload;
 
 		var messageWrapperString = JsonConvert.SerializeObject(messageWrapper);
@@ -98,11 +114,18 @@ public class NetworkManager : MonoBehaviour
 		SendMessageToServer(messageWrapperString);
 	}
 
-	public void SendPlayerWaveSword()
-	{
+	/*
+	 * triggers on animation event
+	 */
+	private void SendPlayerWaveSword()
+	{		
 		var messageWrapper = new MessageWrapper();
 
-		var playerWaveMessage = new PlayerWaveMessage {PlayerName = name, Direction = Direction.Right};
+		var isWatchToRightDirection = _mainHeroController.IsWatchToRightDirection;
+
+		var directionMode = isWatchToRightDirection ? Direction.Right : Direction.Left;
+
+		var playerWaveMessage = new PlayerWaveMessage {PlayerName = name, Direction = directionMode};
 
 		var playerWaveMessagePayload = JsonConvert.SerializeObject(playerWaveMessage);
 
@@ -110,6 +133,8 @@ public class NetworkManager : MonoBehaviour
 		messageWrapper.MessageType = MessageType.PlayerWave;
 
 		var messageWrapperString = JsonConvert.SerializeObject(messageWrapper);
+
+		Debug.Log("SEND playerWaveMessage " + playerWaveMessage);
 
 		SendMessageToServer(messageWrapperString);
 	}

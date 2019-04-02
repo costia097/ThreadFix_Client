@@ -62,6 +62,7 @@
     <Compile Include="Assets\Scripts\core\entities\Enemy.cs" />
     <Compile Include="Assets\Scripts\core\entities\ServerPlayer.cs" />
     <Compile Include="Assets\Scripts\core\message\Direction.cs" />
+    <Compile Include="Assets\Scripts\core\message\EnemyHittedMessage.cs" />
     <Compile Include="Assets\Scripts\core\message\EnemyStateMessage.cs" />
     <Compile Include="Assets\Scripts\core\message\FirstEnemiesSyncMessage.cs" />
     <Compile Include="Assets\Scripts\core\message\FirstPlayersSyncMessage.cs" />

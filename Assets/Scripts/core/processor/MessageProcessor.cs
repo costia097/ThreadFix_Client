@@ -8,6 +8,9 @@ namespace core.processor
 {
     public static class MessageProcessor
     {
+        private static readonly int IsRunning = Animator.StringToHash("isRunning");
+	
+        private static readonly int IsSlashing = Animator.StringToHash("isSlashing");
     
         public static void ProcessMessage(string message)
         {
@@ -40,8 +43,12 @@ namespace core.processor
                     ProcessEnemyStateMessage(enemyStateMessage);
                     break;
                 case MessageType.PlayerWave:
-                    var playerWaveMessage = JsonConvert.DeserializeObject<PlayerWaveMessage>(messageWrapper.Payload);
-                    ProcessPlayerWaveMessage(playerWaveMessage);
+                    //TODO do nothing
+                    break;
+                case MessageType.EnemyHitted:
+                    var enemyHittedMessage = JsonConvert.DeserializeObject<EnemyHittedMessage>(messageWrapper.Payload);
+                    Debug.Log("Process EnemyHitted");
+                    ProcessEnemyHittedMessage(enemyHittedMessage);
                     break;
                 default:
                     throw new UnityException();
@@ -63,10 +70,19 @@ namespace core.processor
             
             var targetTransformPlayer = targetPlayer.GetComponent<Transform>();
 
+            var targetPlayerSpriteRenderer = targetPlayer.GetComponent<SpriteRenderer>();
+
+            targetPlayerSpriteRenderer.flipX = !playerStateMessage.IsWatchToRightDirection;
+
             var targetPosition = new Vector2(playerStateMessage.X, playerStateMessage.Y);
 
             TryToDoSmoothy(targetTransformPlayer, targetPosition);
-            
+
+            var targetPlayerAnimator = targetPlayer.GetComponent<Animator>();
+
+            targetPlayerAnimator.SetBool(IsRunning, playerStateMessage.IsRunning);
+            targetPlayerAnimator.SetBool(IsSlashing, playerStateMessage.IsSlashing);
+
             targetTransformPlayer.rotation = Quaternion.Euler(new Vector3(playerStateMessage.RotationX,
                 playerStateMessage.RotationY, playerStateMessage.RotationZ));
         }
@@ -81,18 +97,7 @@ namespace core.processor
             targetEnemyTransform.position = new Vector2(enemyStateMessage.X, enemyStateMessage.Y);
         }
 
-        private static void ProcessPlayerWaveMessage(PlayerWaveMessage playerWaveMessage)
-        {
-            var targetPlayer = GameObject.Find(playerWaveMessage.PlayerName);
-            if (targetPlayer == null) return;
-
-            var targetPlayerAnimator = targetPlayer.GetComponent<Animator>();
-
-            targetPlayerAnimator.Play("Slashing");
-        }
-
         //TODO in progress
-        
         private static void TryToDoSmoothy(Transform targetPlayerTransform, Vector2 targetPosition)
         {
 
@@ -129,7 +134,21 @@ namespace core.processor
                 enemyInstantiate.name = enemy.Name;
             });
         }
-        
-        
+
+        private static void ProcessEnemyHittedMessage(EnemyHittedMessage enemyHittedMessage)
+        {
+            Debug.Log("EnemyHittedMessage" + enemyHittedMessage.EnemyName);
+            
+            var targetEnemyName = enemyHittedMessage.EnemyName;
+            var targetEnemy = GameObject.Find(targetEnemyName);
+
+            if (targetEnemy == null) return;
+
+            var targetEnemyTransform = targetEnemy.GetComponent<Transform>();
+
+            var currentEnemyPosition = targetEnemyTransform.position;
+            currentEnemyPosition = new Vector2(currentEnemyPosition.x, currentEnemyPosition.y + 1);
+            targetEnemyTransform.position = currentEnemyPosition;
+        }
     }
 }

@@ -4,6 +4,12 @@ namespace core.message
     {
         public string PlayerId { get; set; }
 
+        public bool IsWatchToRightDirection {get; set;}
+        
+        public bool IsRunning { get; set; }
+        
+        public bool IsSlashing { get; set; }
+
         public float X { get; set; }
 
         public float Y { get; set; }
