@@ -47,8 +47,11 @@ namespace core.processor
                     break;
                 case MessageType.EnemyHitted:
                     var enemyHittedMessage = JsonConvert.DeserializeObject<EnemyHittedMessage>(messageWrapper.Payload);
-                    Debug.Log("Process EnemyHitted");
                     ProcessEnemyHittedMessage(enemyHittedMessage);
+                    break;
+                case MessageType.FirstMapSync:
+                    var groundBoxesMessage = JsonConvert.DeserializeObject<List<GroundBoxElement>>(messageWrapper.Payload);
+                    ProcessFirstMapSyncMessage(groundBoxesMessage);
                     break;
                 default:
                     throw new UnityException();
@@ -149,6 +152,18 @@ namespace core.processor
             var currentEnemyPosition = targetEnemyTransform.position;
             currentEnemyPosition = new Vector2(currentEnemyPosition.x, currentEnemyPosition.y + 1);
             targetEnemyTransform.position = currentEnemyPosition;
+        }
+
+        private static void ProcessFirstMapSyncMessage(List<GroundBoxElement> groundBoxElements)
+        {
+            groundBoxElements.ForEach(element =>
+            {
+                var groundBoxElementPrefab = Resources.Load<GameObject>("Prefabs/groundGrassElement");
+                var instantiatedGroundBoxElement = Object.Instantiate(groundBoxElementPrefab,
+                    new Vector2(element.X, element.Y), Quaternion.identity);
+                
+                instantiatedGroundBoxElement.name = element.Id.ToString();
+            });
         }
     }
 }

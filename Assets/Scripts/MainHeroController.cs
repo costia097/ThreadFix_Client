@@ -11,6 +11,7 @@ public class MainHeroController : MonoBehaviour
     private bool _isWatchToRightDirection = true;
 
     private SpriteRenderer _spriteRenderer;
+    private static readonly int IsDestruct = Animator.StringToHash("isDestruct");
 
     private void Start()
     {
@@ -39,6 +40,13 @@ public class MainHeroController : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.Space) && HeroRigidbody2D.IsTouching(groundBoxCollider2D))
         {
             HeroRigidbody2D.AddForce(new Vector2(0, 30), ForceMode2D.Impulse);
+        }
+
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            var target = GameObject.Find("groundGrassElement");
+            var targetAnimator = target.GetComponent<Animator>();
+            targetAnimator.SetBool(IsDestruct, true);
         }
         
         //TODO

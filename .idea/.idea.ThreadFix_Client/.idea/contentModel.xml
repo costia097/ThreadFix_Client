@@ -11,10 +11,13 @@
         </e>
         <e p="scripts" t="Include">
           <e p="core" t="Include">
+            <e p="CameraShake.cs" t="Include" />
             <e p="entities" t="Include">
               <e p="Enemy.cs" t="Include" />
+              <e p="GroundBoxElement.cs" t="Include" />
               <e p="ServerPlayer.cs" t="Include" />
             </e>
+            <e p="GroundDestructor.cs" t="Include" />
             <e p="message" t="Include">
               <e p="Direction.cs" t="Include" />
               <e p="EnemyHittedMessage.cs" t="Include" />
@@ -27,6 +30,7 @@
               <e p="PlayerStateMessage.cs" t="Include" />
               <e p="PlayerWaveMessage.cs" t="Include" />
             </e>
+            <e p="ParticleGroundSystem.cs" t="Include" />
             <e p="processor" t="Include">
               <e p="MessageProcessor.cs" t="Include" />
             </e>

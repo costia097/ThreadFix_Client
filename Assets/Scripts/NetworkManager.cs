@@ -41,6 +41,10 @@ public class NetworkManager : MonoBehaviour
 		    
 	    SendClientPlayerJoinMessage(heroName);
 	    
+	    /*
+	     * map sync logic
+	     */
+	    
 	    // 0.03333333333f
 	    // 10.0f
 
