@@ -59,6 +59,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\core\CameraScript.cs" />
     <Compile Include="Assets\Scripts\core\CameraShake.cs" />
     <Compile Include="Assets\Scripts\core\entities\Enemy.cs" />
     <Compile Include="Assets\Scripts\core\entities\GroundBoxElement.cs" />
@@ -69,6 +70,7 @@
     <Compile Include="Assets\Scripts\core\message\EnemyStateMessage.cs" />
     <Compile Include="Assets\Scripts\core\message\FirstEnemiesSyncMessage.cs" />
     <Compile Include="Assets\Scripts\core\message\FirstPlayersSyncMessage.cs" />
+    <Compile Include="Assets\Scripts\core\message\GroundBoxElementDestructMessage.cs" />
     <Compile Include="Assets\Scripts\core\message\MessageType.cs" />
     <Compile Include="Assets\Scripts\core\message\MessageWrapper.cs" />
     <Compile Include="Assets\Scripts\core\message\PlayerJoinMessage.cs" />

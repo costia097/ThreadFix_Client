@@ -1,10 +1,19 @@
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using UnityEngine;
 
 namespace core
 {
     public class ParticleGroundSystem : MonoBehaviour
     {
-        
+        private static List<Transform> _particiants = new List<Transform>();
+
+        private void Start()
+        {
+            InvokeRepeating("DoClean", 5.0f, 15.0f);
+        }
+
         public void GenerateParticles()
         {
             var groundGrassElementTransform = GetComponent<Transform>();
@@ -35,11 +44,32 @@ namespace core
                 new Vector2(groundGrassElementPosition.x, groundGrassElementPosition.y + 0.3f));
         }
 
+        //TODO 
+        private void DoClean()
+        {
+            _particiants.RemoveAll(e =>
+            {
+                var isReadyToDelete = e.position.y < -100;
+                
+                if (isReadyToDelete)
+                {
+                    Destroy(e.gameObject);
+                }
+                return isReadyToDelete;
+            });
+        }
+
         private static void GenerateParticleWithGivenForce(Vector2 force, GameObject particle, Vector2  groundGrassElementPosition)
         {
             var particleInstantiated = Instantiate(particle, new Vector2(groundGrassElementPosition.x, groundGrassElementPosition.y),
                 Quaternion.identity);
             var particleRigidbody2D = particleInstantiated.GetComponent<Rigidbody2D>();
+
+            particleInstantiated.name = particleInstantiated.gameObject.GetHashCode().ToString();
+
+            var transform = particleInstantiated.GetComponent<Transform>();
+            
+            _particiants.Add(transform);
 
             particleRigidbody2D.AddForce(force);
         }

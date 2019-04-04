@@ -5,6 +5,9 @@ namespace core
 {
     public class GroundDestructor : MonoBehaviour
     {
+        /*
+         * trigger from animator event
+         */
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private void DoDestruct()
         {

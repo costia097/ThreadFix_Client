@@ -11,6 +11,8 @@ namespace core.processor
         private static readonly int IsRunning = Animator.StringToHash("isRunning");
 	
         private static readonly int IsSlashing = Animator.StringToHash("isSlashing");
+        
+        private static readonly int IsDestruct = Animator.StringToHash("isDestruct");
     
         public static void ProcessMessage(string message)
         {
@@ -52,6 +54,10 @@ namespace core.processor
                 case MessageType.FirstMapSync:
                     var groundBoxesMessage = JsonConvert.DeserializeObject<List<GroundBoxElement>>(messageWrapper.Payload);
                     ProcessFirstMapSyncMessage(groundBoxesMessage);
+                    break;
+                case MessageType.MapChanged:
+                    var mapChangedMessage = JsonConvert.DeserializeObject<GroundBoxElementDestructMessage>(messageWrapper.Payload);
+                    ProcessMapChangedMessage(mapChangedMessage);
                     break;
                 default:
                     throw new UnityException();
@@ -164,6 +170,14 @@ namespace core.processor
                 
                 instantiatedGroundBoxElement.name = element.Id.ToString();
             });
+        }
+
+        private static void ProcessMapChangedMessage(GroundBoxElementDestructMessage groundBoxElementDestructMessage)
+        {
+            var groundBoxElementObject = GameObject.Find(groundBoxElementDestructMessage.Id);
+            if (groundBoxElementObject == null) return;
+
+            groundBoxElementObject.GetComponent<Animator>().SetBool(IsDestruct, true);
         }
     }
 }
