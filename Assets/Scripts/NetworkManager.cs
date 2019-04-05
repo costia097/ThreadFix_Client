@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Net.Sockets;
 using core.message;
 using core.processor;
@@ -121,6 +122,7 @@ public class NetworkManager : MonoBehaviour
 	/*
 	 * triggers on animation event
 	 */
+	[SuppressMessage("ReSharper", "UnusedMember.Local")]
 	private void SendPlayerWaveSword()
 	{		
 		var messageWrapper = new MessageWrapper();
@@ -138,7 +140,24 @@ public class NetworkManager : MonoBehaviour
 
 		var messageWrapperString = JsonConvert.SerializeObject(messageWrapper);
 
-		Debug.Log("SEND playerWaveMessage " + playerWaveMessage);
+		SendMessageToServer(messageWrapperString);
+	}
+
+	
+	public void SendPlayerThrowBomb(string bombName)
+	{
+		var messageWrapper = new MessageWrapper();
+		var isWatchToRightDirection = _mainHeroController.IsWatchToRightDirection;
+		var directionMode = isWatchToRightDirection ? Direction.Right : Direction.Left;
+
+		var playerThrowBombMessage = new PlayerThrowBombMessage {PlayerName = name, Direction = directionMode, BombName = bombName};
+
+		var playerThrowBombMessagePayload = JsonConvert.SerializeObject(playerThrowBombMessage);
+
+		messageWrapper.Payload = playerThrowBombMessagePayload;
+		messageWrapper.MessageType = MessageType.PlayerThrowBomb;
+
+		var messageWrapperString = JsonConvert.SerializeObject(messageWrapper);
 
 		SendMessageToServer(messageWrapperString);
 	}

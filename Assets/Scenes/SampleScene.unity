@@ -177,7 +177,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!1 &466592932
 GameObject:
   m_ObjectHideFlags: 0
@@ -299,7 +299,7 @@ PrefabInstance:
     - target: {fileID: 5253878218499446867, guid: b1d3a9df424337c42a0538b163051851,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.80760026
+      value: -0.77
       objectReference: {fileID: 0}
     - target: {fileID: 5253878218499446867, guid: b1d3a9df424337c42a0538b163051851,
         type: 3}
@@ -423,7 +423,7 @@ Camera:
   far clip plane: 1000
   field of view: 4.4611125
   orthographic: 1
-  orthographic size: 6.528575
+  orthographic size: 8.342924
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
@@ -447,8 +447,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2105057302}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.14, y: 1.45, z: -1}
-  m_LocalScale: {x: 0, y: 1, z: 1}
+  m_LocalPosition: {x: 13.38, y: 3.31, z: -1}
+  m_LocalScale: {x: 0, y: 0, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 3
@@ -465,7 +465,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e2ea8fb0142488f93d4fd60aef30459, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shakeMagnitude: 0.05
+  shakeMagnitude: 0.09
   shakeTime: 0.5
   mainCamera: {fileID: 2105057303}
 --- !u!114 &2105057306
@@ -480,7 +480,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5c8ae13c25943e5915f385bc205a08e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tartget: {fileID: 406121237}
+  target: {fileID: 406121237}
   mainCamera: {fileID: 2105057303}
 --- !u!1001 &8664227828258166516
 PrefabInstance:
@@ -502,7 +502,7 @@ PrefabInstance:
     - target: {fileID: 8664227828659994092, guid: ab4f5d824d3fa2044afba322f3e0c446,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.61
+      value: -2.42
       objectReference: {fileID: 0}
     - target: {fileID: 8664227828659994092, guid: ab4f5d824d3fa2044afba322f3e0c446,
         type: 3}

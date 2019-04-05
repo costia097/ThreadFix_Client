@@ -9,11 +9,10 @@ namespace core.processor
     public static class MessageProcessor
     {
         private static readonly int IsRunning = Animator.StringToHash("isRunning");
-	
         private static readonly int IsSlashing = Animator.StringToHash("isSlashing");
-        
         private static readonly int IsDestruct = Animator.StringToHash("isDestruct");
-    
+        private static readonly int IsBoom = Animator.StringToHash("isBoom");
+
         public static void ProcessMessage(string message)
         {
             var messageWrapper = JsonConvert.DeserializeObject<MessageWrapper>(message);
@@ -58,6 +57,14 @@ namespace core.processor
                 case MessageType.MapChanged:
                     var mapChangedMessage = JsonConvert.DeserializeObject<GroundBoxElementDestructMessage>(messageWrapper.Payload);
                     ProcessMapChangedMessage(mapChangedMessage);
+                    break;
+                case MessageType.PlayerThrowBomb:
+                    var playerThrowBombMessage = JsonConvert.DeserializeObject<PlayerThrowBombMessage>(messageWrapper.Payload);
+                    ProcessPlayerThrowBombMessage(playerThrowBombMessage);
+                    break;
+                case MessageType.BombExploded:
+                    var bombExplodedMessage = JsonConvert.DeserializeObject<BombExplosionMessage>(messageWrapper.Payload);
+                    ProcessBombExplosionMessage(bombExplodedMessage);
                     break;
                 default:
                     throw new UnityException();
@@ -178,6 +185,49 @@ namespace core.processor
             if (groundBoxElementObject == null) return;
 
             groundBoxElementObject.GetComponent<Animator>().SetBool(IsDestruct, true);
+        }
+
+        private static void ProcessPlayerThrowBombMessage(PlayerThrowBombMessage playerThrowBombMessage)
+        {
+            var targetPlayer = GameObject.Find(playerThrowBombMessage.PlayerName);
+            if (targetPlayer == null) return;
+            
+            var bombGameObjectPrefab = Resources.Load<GameObject>("Prefabs/Bomb");
+
+            var targetPlayerTransform = targetPlayer.GetComponent<Transform>();
+
+            var targetPlayerTransformPosition = targetPlayerTransform.position;
+
+            var instantiatedBomb = Object.Instantiate(bombGameObjectPrefab,
+                playerThrowBombMessage.Direction == Direction.Right
+                    ? new Vector2(targetPlayerTransformPosition.x + 1, targetPlayerTransformPosition.y)
+                    : new Vector2(targetPlayerTransformPosition.x - 1, targetPlayerTransformPosition.y),
+                Quaternion.identity);
+
+            instantiatedBomb.name = playerThrowBombMessage.BombName;
+            
+            var bombRigidbody = instantiatedBomb.GetComponent<Rigidbody2D>();
+            
+            bombRigidbody.AddForce(playerThrowBombMessage.Direction == Direction.Right ? new Vector2(100, 300) : new Vector2(-100, 300));
+        }
+
+        private static void ProcessBombExplosionMessage(BombExplosionMessage bombExplosionMessage)
+        {
+            var bombId = bombExplosionMessage.BombId;
+            var targetBombObject = GameObject.Find(bombId);
+            if (targetBombObject == null) return;
+
+            var targetBombAnimator = targetBombObject.GetComponent<Animator>();
+            targetBombAnimator.SetBool(IsBoom, true);
+
+            bombExplosionMessage.EnemiesHitted.ForEach(message =>
+            {
+                var hittedEnemy = GameObject.Find(message.EnemyName);
+                var hittedEnemyTransform = hittedEnemy.GetComponent<Transform>();
+                var position = hittedEnemyTransform.position;
+                position = new Vector2(position.x, position.y + 1);
+                hittedEnemyTransform.position = position;
+            });
         }
     }
 }

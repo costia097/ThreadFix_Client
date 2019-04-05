@@ -10,6 +10,8 @@ namespace core.message
         PlayerWave, 
         EnemyHitted, 
         FirstMapSync,
-        MapChanged
+        MapChanged,
+        PlayerThrowBomb,
+        BombExploded
     }
 }

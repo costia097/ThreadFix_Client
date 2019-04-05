@@ -59,12 +59,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\core\BombDestructor.cs" />
     <Compile Include="Assets\Scripts\core\CameraScript.cs" />
     <Compile Include="Assets\Scripts\core\CameraShake.cs" />
     <Compile Include="Assets\Scripts\core\entities\Enemy.cs" />
     <Compile Include="Assets\Scripts\core\entities\GroundBoxElement.cs" />
     <Compile Include="Assets\Scripts\core\entities\ServerPlayer.cs" />
     <Compile Include="Assets\Scripts\core\GroundDestructor.cs" />
+    <Compile Include="Assets\Scripts\core\message\BombExplosionMessage.cs" />
     <Compile Include="Assets\Scripts\core\message\Direction.cs" />
     <Compile Include="Assets\Scripts\core\message\EnemyHittedMessage.cs" />
     <Compile Include="Assets\Scripts\core\message\EnemyStateMessage.cs" />
@@ -75,6 +77,7 @@
     <Compile Include="Assets\Scripts\core\message\MessageWrapper.cs" />
     <Compile Include="Assets\Scripts\core\message\PlayerJoinMessage.cs" />
     <Compile Include="Assets\Scripts\core\message\PlayerStateMessage.cs" />
+    <Compile Include="Assets\Scripts\core\message\PlayerThrowBombMessage.cs" />
     <Compile Include="Assets\Scripts\core\message\PlayerWaveMessage.cs" />
     <Compile Include="Assets\Scripts\core\ParticleGroundSystem.cs" />
     <Compile Include="Assets\Scripts\core\processor\MessageProcessor.cs" />

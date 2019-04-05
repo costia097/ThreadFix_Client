@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Globalization;
+using UnityEngine;
 
 public class MainHeroController : MonoBehaviour
 {
@@ -17,6 +18,7 @@ public class MainHeroController : MonoBehaviour
     {
         HeroRigidbody2D = GetComponent<Rigidbody2D>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
+        _networkManager = GetComponent<NetworkManager>();
         
         name = GetHashCode().ToString();
     }
@@ -48,6 +50,12 @@ public class MainHeroController : MonoBehaviour
             var targetAnimator = target.GetComponent<Animator>();
             targetAnimator.SetBool(IsDestruct, true);
         }
+
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            var bombName = PlayerThrowBomb();
+            _networkManager.SendPlayerThrowBomb(bombName);
+        }
         
         //TODO
         if (Input.GetKeyUp(KeyCode.Escape))
@@ -61,5 +69,23 @@ public class MainHeroController : MonoBehaviour
     public bool IsWatchToRightDirection
     {
         get { return _isWatchToRightDirection; }
+    }
+
+    private string PlayerThrowBomb()
+    {
+        var bombGameObjectPrefab = Resources.Load<GameObject>("Prefabs/Bomb");
+
+        var position = transform.position;
+
+        var instantiatedBomb = 
+            Instantiate(bombGameObjectPrefab, _isWatchToRightDirection ? new Vector2(position.x + 1, position.y) : new Vector2(position.x - 1, position.y), Quaternion.identity);
+
+        instantiatedBomb.name = Random.value.ToString(CultureInfo.InvariantCulture);
+        
+        var bombRigidbody2D = instantiatedBomb.GetComponent<Rigidbody2D>();
+        
+        bombRigidbody2D.AddForce(_isWatchToRightDirection ? new Vector2(100, 300) : new Vector2(-100, 300));
+
+        return instantiatedBomb.name;
     }
 }
